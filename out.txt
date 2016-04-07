@@ -1,0 +1,74 @@
+  CHK     include/generated/uapi/linux/version.h
+  CC      scripts/mod/devicetable-offsets.s
+  GEN     scripts/mod/devicetable-offsets.h
+  HOSTCC  scripts/mod/file2alias.o
+  CHK     include/generated/utsrelease.h
+make[1]: 'include/generated/mach-types.h' is up to date.
+  CALL    scripts/checksyscalls.sh
+  HOSTLD  scripts/mod/modpost
+make[1]: Nothing to be done for 'dtbs'.
+  CHK     include/generated/compile.h
+  CC      kernel/sched/core.o
+kernel/sched/core.c: In function 'avg_nr_running':
+kernel/sched/core.c:3055:10: error: invalid use of undefined type 'struct nr_stats_s'
+   struct nr_stats_s *stats = &per_cpu(runqueue_stats, i);
+          ^
+In file included from /home/noahvt/BuildServer/NKernelDory/arch/arm/include/asm/percpu.h:50:0,
+                 from include/linux/percpu.h:10,
+                 from include/linux/topology.h:34,
+                 from include/linux/gfp.h:7,
+                 from include/linux/mm.h:8,
+                 from kernel/sched/core.c:29:
+include/asm-generic/percpu.h:57:3: error: dereferencing pointer to incomplete type
+  (*SHIFT_PERCPU_PTR(&(var), per_cpu_offset(cpu)))
+   ^
+kernel/sched/core.c:3055:31: note: in expansion of macro 'per_cpu'
+   struct nr_stats_s *stats = &per_cpu(runqueue_stats, i);
+                               ^
+kernel/sched/core.c:3064:38: error: dereferencing pointer to incomplete type
+   seqcnt = read_seqcount_begin(&stats->ave_seqcnt);
+                                      ^
+kernel/sched/core.c:3065:3: error: implicit declaration of function 'do_avg_nr_running' [-Werror=implicit-function-declaration]
+   ave_nr_running = do_avg_nr_running(q);
+   ^
+kernel/sched/core.c:3066:33: error: dereferencing pointer to incomplete type
+   if (read_seqcount_retry(&stats->ave_seqcnt, seqcnt)) {
+                                 ^
+kernel/sched/core.c:3067:30: error: dereferencing pointer to incomplete type
+    read_seqcount_begin(&stats->ave_seqcnt);
+                              ^
+kernel/sched/core.c:3068:26: error: dereferencing pointer to incomplete type
+    ave_nr_running = stats->ave_nr_running;
+                          ^
+kernel/sched/core.c: In function 'avg_cpu_nr_running':
+kernel/sched/core.c:3081:9: error: invalid use of undefined type 'struct nr_stats_s'
+  struct nr_stats_s *stats = &per_cpu(runqueue_stats, cpu);
+         ^
+In file included from /home/noahvt/BuildServer/NKernelDory/arch/arm/include/asm/percpu.h:50:0,
+                 from include/linux/percpu.h:10,
+                 from include/linux/topology.h:34,
+                 from include/linux/gfp.h:7,
+                 from include/linux/mm.h:8,
+                 from kernel/sched/core.c:29:
+include/asm-generic/percpu.h:57:3: error: dereferencing pointer to incomplete type
+  (*SHIFT_PERCPU_PTR(&(var), per_cpu_offset(cpu)))
+   ^
+kernel/sched/core.c:3081:30: note: in expansion of macro 'per_cpu'
+  struct nr_stats_s *stats = &per_cpu(runqueue_stats, cpu);
+                              ^
+kernel/sched/core.c:3090:37: error: dereferencing pointer to incomplete type
+  seqcnt = read_seqcount_begin(&stats->ave_seqcnt);
+                                     ^
+kernel/sched/core.c:3092:32: error: dereferencing pointer to incomplete type
+  if (read_seqcount_retry(&stats->ave_seqcnt, seqcnt)) {
+                                ^
+kernel/sched/core.c:3093:29: error: dereferencing pointer to incomplete type
+   read_seqcount_begin(&stats->ave_seqcnt);
+                             ^
+kernel/sched/core.c:3094:25: error: dereferencing pointer to incomplete type
+   ave_nr_running = stats->ave_nr_running;
+                         ^
+cc1: some warnings being treated as errors
+scripts/Makefile.build:308: recipe for target 'kernel/sched/core.o' failed
+scripts/Makefile.build:455: recipe for target 'kernel/sched' failed
+Makefile:799: recipe for target 'kernel' failed
